@@ -1,18 +1,13 @@
 //Функция для проверки длины строки
 
-const checkLength = (str, length) => {
-  if (str.length <= length) {
-    return true;
-  }
-  return false;
-};
+const checkLength = (str, length) => str.length <= length;
 
 checkLength('Проверяемая строка', 20);
 
 
 // Функция для проверки, является ли строка палиндромом
 
-const checkPalindrom = (str) => {
+const checkPalindrome = (str) => {
   const trimStr = str.split(' ').join('').toLowerCase();
   if (trimStr === trimStr.split('').reverse().join('')) {
     return `Строка ${str} явялется палиндромом`;
@@ -20,13 +15,13 @@ const checkPalindrom = (str) => {
   return `Строка ${str} не явялется палиндромом`;
 };
 
-checkPalindrom('А роза упала на лапу Азора');
+checkPalindrome('А роза упала на лапу Азора');
 
 
 // Функция, которая принимает строку, извлекает содержащиеся в ней цифры от 0 до 9
 // и возвращает их в виде целого положительного числа
 
-const returnNumber = (str) => {
+const getNumber = (str) => {
   const convertedStr = str.toString();
   if (convertedStr.match(/\d+/g)) {
     return Number(convertedStr.replace(/\D/g, ''));
@@ -34,7 +29,7 @@ const returnNumber = (str) => {
   return NaN;
 };
 
-returnNumber('а 78я 3487 4 томат 90 fvkdjbfv');
+getNumber('а 78я 3487 4 томат 90 fvkdjbfv');
 
 
 // Функция для формирования адресов файлов
