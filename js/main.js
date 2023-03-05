@@ -110,5 +110,3 @@ const createPost = () => ({
 });
 
 const posts = Array.from({length: 25}, createPost);
-
-console.log(posts);
