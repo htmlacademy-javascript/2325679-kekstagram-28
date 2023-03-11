@@ -5,7 +5,7 @@ const getRandomInteger = (a, b) => {
   return Math.floor(result);
 };
 
-const createRandomIntegerId = (min, max) => {
+const createRandomInteger = (min, max) => {
   const previousValues = [];
 
   return function () {
@@ -21,42 +21,11 @@ const createRandomIntegerId = (min, max) => {
   };
 };
 
-const createRandomIntegerUrl = (min, max) => {
-  const previousValues = [];
-
-  return function () {
-    let currentValue = getRandomInteger(min, max);
-    if (previousValues.length >= (max - min + 1)) {
-      return null;
-    }
-    while (previousValues.includes(currentValue)) {
-      currentValue = getRandomInteger(min, max);
-    }
-    previousValues.push(currentValue);
-    return currentValue;
-  };
-};
-
-const createRandomIntegerIdComment = (min, max) => {
-  const previousValues = [];
-
-  return function () {
-    let currentValue = getRandomInteger(min, max);
-    if (previousValues.length >= (max - min + 1)) {
-      return null;
-    }
-    while (previousValues.includes(currentValue)) {
-      currentValue = getRandomInteger(min, max);
-    }
-    previousValues.push(currentValue);
-    return currentValue;
-  };
-};
 
 const getRandomArrayElement = (elements) => elements[getRandomInteger(0, elements.length - 1)];
 
-const generatePhotoId = createRandomIntegerId(1, 25);
-const generatePhotoUrl = createRandomIntegerUrl(1, 25);
-const generatePhotoCommentId = createRandomIntegerIdComment(1, 100);
+const generatePhotoId = createRandomInteger(1, 25);
+const generatePhotoUrl = createRandomInteger(1, 25);
+const generatePhotoCommentId = createRandomInteger(1, 100);
 
 export {getRandomInteger, getRandomArrayElement, generatePhotoId, generatePhotoUrl, generatePhotoCommentId};

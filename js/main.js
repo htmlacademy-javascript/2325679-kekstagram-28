@@ -1,5 +1,2 @@
-import {createPosts} from './data.js';
-import './functions.js';
-
-createPosts();
+import './miniature.js';
 
