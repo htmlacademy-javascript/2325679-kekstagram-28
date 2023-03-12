@@ -1,6 +1,6 @@
 import {getRandomInteger, getRandomArrayElement, generatePhotoId, generatePhotoUrl, generatePhotoCommentId} from './util.js';
 
-const DESCRIPTION = [
+const DESCRIPTIONS = [
   'Это я на отдыхе',
   'Новый год в кругу семьи',
   'Люблю природу',
@@ -8,7 +8,7 @@ const DESCRIPTION = [
   'День рождения моей подруги'
 ];
 
-const MESSAGE = [
+const MESSAGES = [
   'Всё отлично!',
   'В целом всё неплохо. Но не всё.',
   'Когда вы делаете фотографию, хорошо бы убирать палец из кадра. В конце концов это просто непрофессионально.',
@@ -17,7 +17,7 @@ const MESSAGE = [
   'Лица у людей на фотке перекошены, как будто их избивают. Как можно было поймать такой неудачный момент?!'
 ];
 
-const NAME = [
+const NAMES = [
   'Артём',
   'Павел',
   'Никита',
@@ -30,22 +30,26 @@ const NAME = [
   'Софья'
 ];
 
+const generateMessage = () => (
+  Array.from({length: getRandomInteger(1, 2)}, () => getRandomArrayElement(MESSAGES)).join(' ')
+);
+
 
 const createComment = () => ({
   id: generatePhotoCommentId(),
   avatar: `img/avatar-${getRandomInteger(1, 6)}.svg`,
-  message: getRandomArrayElement(MESSAGE),
-  name: getRandomArrayElement(NAME)
+  message: generateMessage(),
+  name: getRandomArrayElement(NAMES)
 });
 
 const generateComments = () => (
-  Array.from({length: 3}, createComment)
+  Array.from({length: getRandomInteger(2, 6)}, createComment)
 );
 
 const createPost = () => ({
   id: generatePhotoId(),
   url: `photos/${generatePhotoUrl()}.jpg`,
-  description: getRandomArrayElement(DESCRIPTION),
+  description: getRandomArrayElement(DESCRIPTIONS),
   likes: getRandomInteger(15, 200),
   comments: generateComments()
 });
