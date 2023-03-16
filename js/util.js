@@ -28,4 +28,6 @@ const generatePhotoId = createRandomInteger(1, 25);
 const generatePhotoUrl = createRandomInteger(1, 25);
 const generatePhotoCommentId = createRandomInteger(1, 100);
 
-export {getRandomInteger, getRandomArrayElement, generatePhotoId, generatePhotoUrl, generatePhotoCommentId};
+const isEscapeKey = (evt) => evt.key === 'Escape';
+
+export {getRandomInteger, getRandomArrayElement, generatePhotoId, generatePhotoUrl, generatePhotoCommentId, isEscapeKey};
