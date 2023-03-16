@@ -43,7 +43,7 @@ const createComment = () => ({
 });
 
 const generateComments = () => (
-  Array.from({length: getRandomInteger(2, 6)}, createComment)
+  Array.from({length: getRandomInteger(2, 10)}, createComment)
 );
 
 const createPost = () => ({
