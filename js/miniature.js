@@ -1,6 +1,6 @@
 import {createPosts} from './data.js';
 
-const picturePlace = document.querySelector('.pictures');
+const picturePlaceElement = document.querySelector('.pictures');
 const pictureTemplate = document.querySelector('#picture').content.querySelector('.picture');
 
 const posts = createPosts();
@@ -15,6 +15,6 @@ posts.forEach(({url, likes, comments}) => {
   postsFragment.appendChild(pictureElement);
 });
 
-picturePlace.appendChild(postsFragment);
+picturePlaceElement.appendChild(postsFragment);
 
 export {posts};
