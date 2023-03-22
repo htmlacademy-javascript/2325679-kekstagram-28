@@ -2,6 +2,7 @@ import {isEscapeKey} from './util.js';
 
 const COMMENT_LENGTH = 140;
 const HASHTAG = /^#[a-zа-яё0-9]{1,19}$/i;
+const HASHTAGS_LENGTH = 5;
 
 const fileUploadElement = document.querySelector('.img-upload__input');
 const formEditImgElement = document.querySelector('.img-upload__overlay');
@@ -14,17 +15,17 @@ const formElement = document.querySelector('.img-upload__form');
 const onDocumentKeydown = (evt) => {
   if (isEscapeKey(evt)) {
     evt.preventDefault();
-    closeformEditImg();
+    closeFormEditImg();
   }
 };
 
-const openformEditImg = function () {
+const openFormEditImg = function () {
   document.addEventListener('keydown', onDocumentKeydown);
   formEditImgElement.classList.remove('hidden');
   bodyElement.classList.add('.modal-open');
 };
 
-function closeformEditImg () {
+function closeFormEditImg () {
   document.removeEventListener('keydown', onDocumentKeydown);
   formEditImgElement.classList.add('hidden');
   bodyElement.classList.remove('.modal-open');
@@ -43,7 +44,7 @@ const validateComment = function (value) {
 const validateHashtag = function (value) {
   const hashtagsArray = value.trim().toLowerCase().split(' ').filter((element) => (element !== null && element !== '' || element === 0));
 
-  const isValidLength = hashtagsArray.length <= 5;
+  const isValidLength = hashtagsArray.length <= HASHTAGS_LENGTH;
 
   const isValidHashtag = hashtagsArray.every((tag) => HASHTAG.test(tag));
 
@@ -63,9 +64,9 @@ const submitForm = function (evt) {
   }
 };
 
-fileUploadElement.addEventListener('change', openformEditImg);
+fileUploadElement.addEventListener('change', openFormEditImg);
 
-cancelButtonElement.addEventListener('click', closeformEditImg);
+cancelButtonElement.addEventListener('click', closeFormEditImg);
 
 hashtagsFieldElement.addEventListener('keydown', (evt) => {
   if (isEscapeKey(evt)) {
