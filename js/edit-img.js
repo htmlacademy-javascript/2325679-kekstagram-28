@@ -1,3 +1,6 @@
+const LOWER_SCALE_LIMIT = 25;
+const UPPER_SCALE_LIMIT = 100;
+
 const buttonSmallerElement = document.querySelector('.scale__control--smaller');
 const buttonBiggerElement = document.querySelector('.scale__control--bigger');
 const scaleValueElement = document.querySelector('.scale__control--value');
@@ -11,14 +14,14 @@ const effectLevelValueElement = document.querySelector('.effect-level__value');
 const effectLevelSliderElement = document.querySelector('.effect-level__slider');
 
 buttonBiggerElement.addEventListener('click', () => {
-  if (parseInt(scaleValueElement.value, 10) < 100) {
+  if (parseInt(scaleValueElement.value, 10) < UPPER_SCALE_LIMIT) {
     scaleValueElement.value = `${parseInt(scaleValueElement.value, 10) + 25}%`;
     imgUploadPreviewElement.style.transform = `scale(${parseInt(scaleValueElement.value, 10) / 100})`;
   }
 });
 
 buttonSmallerElement.addEventListener('click', () => {
-  if (parseInt(scaleValueElement.value, 10) > 25) {
+  if (parseInt(scaleValueElement.value, 10) > LOWER_SCALE_LIMIT) {
     scaleValueElement.value = `${parseInt(scaleValueElement.value, 10) - 25}%`;
     imgUploadPreviewElement.style.transform = `scale(${parseInt(scaleValueElement.value, 10) / 100})`;
   }

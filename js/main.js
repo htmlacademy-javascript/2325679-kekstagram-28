@@ -1,4 +1,4 @@
-import './fullSizePicture.js';
+import './full-size-picture.js';
 import './form.js';
-import './editImg.js';
+import './edit-img.js';
 
