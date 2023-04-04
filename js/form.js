@@ -1,6 +1,7 @@
 import {isEscapeKey} from './util.js';
 import {sendData} from './api.js';
 import {resetData} from './edit-img.js';
+import {showAlert} from './util.js';
 
 const COMMENT_LENGTH = 140;
 const HASHTAG = /^#[a-zа-яё0-9]{1,19}$/i;
@@ -80,13 +81,13 @@ commentFieldElement.addEventListener('keydown', (evt) => {
 
 const onFormKeyDown = (evt, messageElement) => {
   if (isEscapeKey(evt)) {
-    messageElement.remove();
+    messageElement.classList.add('hidden');
   }
 };
 
 const onClickBehindForm = (evt, messageElement) => {
   if ((!evt.target.classList.contains('success__inner')) && (!evt.target.classList.contains('success__title'))) {
-    messageElement.remove();
+    messageElement.classList.add('hidden');
   }
 };
 
@@ -100,7 +101,7 @@ const successFormUpload = function () {
   document.querySelector('body').appendChild(successMessageElement);
   successButtonElement.addEventListener('click', () => {
     //document.querySelector('body').removeChild(successMessageElement);
-    successMessageElement.remove();
+    successMessageElement.classList.add('hidden');
   });
   document.removeEventListener('keydown', onDocumentKeydown);
   document.addEventListener('keydown', onFormKeyDown(successMessageElement));
@@ -113,7 +114,7 @@ const failedFormUpload = function () {
   const failedButtonElement = document.querySelector('.error__button');
   failedButtonElement.addEventListener('click', () => {
     //document.querySelector('body').removeChild(failedMessageElement);
-    failedMessageElement.remove();
+    failedMessageElement.classList.add('hidden');
   });
   document.querySelector('body').appendChild(failedMessageElement);
   document.removeEventListener('keydown', onDocumentKeydown);
@@ -124,17 +125,23 @@ const failedFormUpload = function () {
 document.removeEventListener('keydown', onFormKeyDown);
 document.removeEventListener('click', onClickBehindForm);
 
-const setImgFormSubmit = (onSuccess, onFail) => {
+const setImgFormSubmit = () => {
   formElement.addEventListener('submit', (evt) => {
     evt.preventDefault();
     const isValid = pristine.validate();
     if (isValid) {
-      sendData(new FormData(evt.target))
-        .then(onSuccess)
-        .catch(onFail);
+      sendData(new FormData(evt.target)).then((response) => {
+        if (response.ok) {
+          successFormUpload();
+        } else {
+          failedFormUpload();
+        }
+      })
+        .catch(() => {
+          showAlert('Фотография не загружена. Попробуйте позже');
+        });
     }
   });
 };
 
-
-setImgFormSubmit(successFormUpload, failedFormUpload);
+setImgFormSubmit();

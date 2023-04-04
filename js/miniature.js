@@ -1,5 +1,3 @@
-//import {createPosts} from './data.js';
-
 const picturePlaceElement = document.querySelector('.pictures');
 const pictureTemplate = document.querySelector('#picture').content.querySelector('.picture');
 
