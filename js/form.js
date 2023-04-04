@@ -1,4 +1,6 @@
 import {isEscapeKey} from './util.js';
+import {sendData} from './api.js';
+import {resetData} from './edit-img.js';
 
 const COMMENT_LENGTH = 140;
 const HASHTAG = /^#[a-zа-яё0-9]{1,19}$/i;
@@ -30,6 +32,8 @@ function closeFormEditImg () {
   formEditImgElement.classList.add('hidden');
   bodyElement.classList.remove('.modal-open');
   fileUploadElement.value = '';
+  hashtagsFieldElement.value = '';
+  commentFieldElement.value = '';
 }
 
 const pristine = new Pristine(formElement, {
@@ -57,13 +61,6 @@ pristine.addValidator(formElement.querySelector('.text__description'), validateC
 
 pristine.addValidator(formElement.querySelector('.text__hashtags'), validateHashtag, 'Введено некорректное значение хэштегов');
 
-const submitForm = function (evt) {
-  const isValid = pristine.validate();
-  if (!isValid) {
-    evt.preventDefault();
-  }
-};
-
 fileUploadElement.addEventListener('change', openFormEditImg);
 
 cancelButtonElement.addEventListener('click', closeFormEditImg);
@@ -80,4 +77,64 @@ commentFieldElement.addEventListener('keydown', (evt) => {
   }
 });
 
-formElement.addEventListener('submit', submitForm);
+
+const onFormKeyDown = (evt, messageElement) => {
+  if (isEscapeKey(evt)) {
+    messageElement.remove();
+  }
+};
+
+const onClickBehindForm = (evt, messageElement) => {
+  if ((!evt.target.classList.contains('success__inner')) && (!evt.target.classList.contains('success__title'))) {
+    messageElement.remove();
+  }
+};
+
+const successFormUpload = function () {
+  resetData();
+  hashtagsFieldElement.value = '';
+  commentFieldElement.value = '';
+  const successTemplate = document.querySelector('#success').content.querySelector('.success');
+  const successMessageElement = successTemplate.cloneNode(true);
+  const successButtonElement = document.querySelector('.success__button');
+  document.querySelector('body').appendChild(successMessageElement);
+  successButtonElement.addEventListener('click', () => {
+    //document.querySelector('body').removeChild(successMessageElement);
+    successMessageElement.remove();
+  });
+  document.removeEventListener('keydown', onDocumentKeydown);
+  document.addEventListener('keydown', onFormKeyDown(successMessageElement));
+  document.addEventListener('click', onClickBehindForm(successMessageElement));
+};
+
+const failedFormUpload = function () {
+  const failedTemplate = document.querySelector('#error').content.querySelector('.error');
+  const failedMessageElement = failedTemplate.cloneNode(true);
+  const failedButtonElement = document.querySelector('.error__button');
+  failedButtonElement.addEventListener('click', () => {
+    //document.querySelector('body').removeChild(failedMessageElement);
+    failedMessageElement.remove();
+  });
+  document.querySelector('body').appendChild(failedMessageElement);
+  document.removeEventListener('keydown', onDocumentKeydown);
+  document.addEventListener('keydown', onFormKeyDown(failedMessageElement));
+  document.addEventListener('click', onClickBehindForm(failedMessageElement));
+};
+
+document.removeEventListener('keydown', onFormKeyDown);
+document.removeEventListener('click', onClickBehindForm);
+
+const setImgFormSubmit = (onSuccess, onFail) => {
+  formElement.addEventListener('submit', (evt) => {
+    evt.preventDefault();
+    const isValid = pristine.validate();
+    if (isValid) {
+      sendData(new FormData(evt.target))
+        .then(onSuccess)
+        .catch(onFail);
+    }
+  });
+};
+
+
+setImgFormSubmit(successFormUpload, failedFormUpload);
