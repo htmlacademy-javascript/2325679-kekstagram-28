@@ -1,8 +1,15 @@
 import {isEscapeKey} from './util.js';
+import {sendData} from './api.js';
+import {resetData} from './edit-img.js';
 
 const COMMENT_LENGTH = 140;
 const HASHTAG = /^#[a-zа-яё0-9]{1,19}$/i;
 const HASHTAGS_LENGTH = 5;
+
+const SUBMIT_BUTTON_TEXT = {
+  IDLE: 'Опубликовать',
+  SENDING: 'Опубликовываю...'
+};
 
 const fileUploadElement = document.querySelector('.img-upload__input');
 const formEditImgElement = document.querySelector('.img-upload__overlay');
@@ -11,6 +18,7 @@ const cancelButtonElement = document.querySelector('.img-upload__cancel');
 const hashtagsFieldElement = document.querySelector('.text__hashtags');
 const commentFieldElement = document.querySelector('.text__description');
 const formElement = document.querySelector('.img-upload__form');
+const submitButtonElement = document.querySelector('.img-upload__submit');
 
 const onDocumentKeydown = (evt) => {
   if (isEscapeKey(evt)) {
@@ -30,6 +38,8 @@ function closeFormEditImg () {
   formEditImgElement.classList.add('hidden');
   bodyElement.classList.remove('.modal-open');
   fileUploadElement.value = '';
+  hashtagsFieldElement.value = '';
+  commentFieldElement.value = '';
 }
 
 const pristine = new Pristine(formElement, {
@@ -57,13 +67,6 @@ pristine.addValidator(formElement.querySelector('.text__description'), validateC
 
 pristine.addValidator(formElement.querySelector('.text__hashtags'), validateHashtag, 'Введено некорректное значение хэштегов');
 
-const submitForm = function (evt) {
-  const isValid = pristine.validate();
-  if (!isValid) {
-    evt.preventDefault();
-  }
-};
-
 fileUploadElement.addEventListener('change', openFormEditImg);
 
 cancelButtonElement.addEventListener('click', closeFormEditImg);
@@ -80,4 +83,91 @@ commentFieldElement.addEventListener('keydown', (evt) => {
   }
 });
 
-formElement.addEventListener('submit', submitForm);
+
+const successFormUpload = function () {
+  resetData();
+  hashtagsFieldElement.value = '';
+  commentFieldElement.value = '';
+  const successTemplate = document.querySelector('#success').content.querySelector('.success');
+  const successMessageElement = successTemplate.cloneNode(true);
+  const successButtonElement = successTemplate.querySelector('.success__button');
+  document.querySelector('body').appendChild(successMessageElement);
+  successButtonElement.addEventListener('click', () => {
+    successMessageElement.remove();
+  });
+  document.removeEventListener('keydown', onDocumentKeydown);
+
+  const onFormKeyDown = (evt) => {
+    if (isEscapeKey(evt)) {
+      successMessageElement.remove();
+      window.removeEventListener('keydown', onFormKeyDown);
+    }
+  };
+  const onClickBehindForm = (evt) => {
+    if (evt.target !== successMessageElement.querySelector('div')) {
+      successMessageElement.remove();
+      window.removeEventListener('click', onClickBehindForm);
+    }
+  };
+
+  window.addEventListener('keydown', onFormKeyDown);
+  window.addEventListener('click', onClickBehindForm);
+};
+
+const failedFormUpload = function () {
+  const failedTemplate = document.querySelector('#error').content.querySelector('.error');
+  const failedMessageElement = failedTemplate.cloneNode(true);
+  const failedButtonElement = failedTemplate.querySelector('.error__button');
+  failedButtonElement.addEventListener('click', () => {
+    failedMessageElement.classList.add('hidden');
+  });
+  document.querySelector('body').appendChild(failedMessageElement);
+  document.removeEventListener('keydown', onDocumentKeydown);
+
+  const onFormKeyDown = (evt) => {
+    if (isEscapeKey(evt)) {
+      failedMessageElement.remove();
+      window.removeEventListener('keydown', onFormKeyDown);
+    }
+  };
+  const onClickBehindForm = (evt) => {
+    if (evt.target !== failedMessageElement.querySelector('div')) {
+      failedMessageElement.remove();
+      window.removeEventListener('click', onClickBehindForm);
+    }
+  };
+  window.addEventListener('keydown', onFormKeyDown);
+  window.addEventListener('click', onClickBehindForm);
+};
+
+const blockSubmitButton = () => {
+  submitButtonElement.disabled = true;
+  submitButtonElement.textContent = SUBMIT_BUTTON_TEXT.SENDING;
+};
+
+const unblockSubmitButton = () => {
+  submitButtonElement.disabled = false;
+  submitButtonElement.textContent = SUBMIT_BUTTON_TEXT.IDLE;
+};
+
+const setImgFormSubmit = () => {
+  formElement.addEventListener('submit', (evt) => {
+    evt.preventDefault();
+    const isValid = pristine.validate();
+    if (isValid) {
+      blockSubmitButton();
+      sendData(new FormData(evt.target))
+        .then(() => {
+          successFormUpload();
+        })
+        .catch(() => {
+          failedFormUpload();
+        })
+        .finally(unblockSubmitButton);
+    }
+  });
+};
+
+setImgFormSubmit();
+
+export {failedFormUpload};

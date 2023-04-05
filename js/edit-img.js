@@ -12,6 +12,7 @@ const imgUploadEffectLevelElement = document.querySelector('.img-upload__effect-
 imgUploadEffectLevelElement.classList.add('hidden');
 const effectLevelValueElement = document.querySelector('.effect-level__value');
 const effectLevelSliderElement = document.querySelector('.effect-level__slider');
+const cancelElement = document.querySelector('.img-upload__cancel');
 
 buttonBiggerElement.addEventListener('click', () => {
   if (parseInt(scaleValueElement.value, 10) < UPPER_SCALE_LIMIT) {
@@ -133,5 +134,18 @@ const effectChange = function(evt) {
   }
 };
 
+const resetData = function () {
+  scaleValueElement.value = '100%';
+  scaleValueElement.setAttribute('value', '100%');
+  imgUploadPreviewElement.className = 'effects__preview--none';
+  document.querySelector('input[id="effect-none"]').checked = true;
+  imgUploadPreviewElement.style.removeProperty('filter');
+  imgUploadEffectLevelElement.classList.add('hidden');
+  imgUploadPreviewElement.style.transform = 'scale(1)';
+};
+
+cancelElement.addEventListener('click', resetData);
 
 effectsFormElement.addEventListener('change', effectChange);
+
+export {resetData};
