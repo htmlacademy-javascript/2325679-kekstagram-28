@@ -91,6 +91,7 @@ const successFormUpload = function () {
   const successTemplate = document.querySelector('#success').content.querySelector('.success');
   const successMessageElement = successTemplate.cloneNode(true);
   const successButtonElement = successTemplate.querySelector('.success__button');
+  formEditImgElement.classList.add('hidden');
   document.querySelector('body').appendChild(successMessageElement);
   successButtonElement.addEventListener('click', () => {
     successMessageElement.remove();

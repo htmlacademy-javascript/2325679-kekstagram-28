@@ -52,4 +52,14 @@ const showAlert = (message) => {
     alertContainer.remove();
   }, ALERT_SHOW_TIME);
 };
-export {getRandomInteger, getRandomArrayElement, generatePhotoId, generatePhotoUrl, generatePhotoCommentId, isEscapeKey, showAlert};
+
+
+function debounce (callback, timeoutDelay = 500) {
+  let timeoutId;
+  return (...rest) => {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => callback.apply(this, rest), timeoutDelay);
+  };
+}
+
+export {getRandomInteger, getRandomArrayElement, generatePhotoId, generatePhotoUrl, generatePhotoCommentId, isEscapeKey, showAlert, debounce};

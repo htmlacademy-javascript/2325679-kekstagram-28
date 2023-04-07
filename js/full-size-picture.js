@@ -1,6 +1,11 @@
 import {posts} from './miniature.js';
 import {isEscapeKey} from './util.js';
 
+const IMG_WIDTH = '35';
+const IMG_HEIGHT = '35';
+
+const COMMENTS_PART = 5;
+
 const picturesElement = document.querySelector('.pictures');
 const fullSizePicturePopupElement = document.querySelector('.big-picture');
 const fullSizePictureBlockElement = document.querySelector('.big-picture__img');
@@ -11,9 +16,6 @@ const exitButtonElement = document.querySelector('.big-picture__cancel');
 const commentsSocialElement = document.querySelector('.social__comments');
 const commentsSocialCountElement = document.querySelector('.social__comment-count');
 const commentsLoaderElement = document.querySelector('.comments-loader');
-
-const IMG_WIDTH = '35';
-const IMG_HEIGHT = '35';
 
 const onDocumentKeydown = (evt) => {
   if (isEscapeKey(evt)) {
@@ -63,7 +65,7 @@ const showFullSizePictures = (evt) => {
       }
     }
     const renderComments = (commentsArray) => {
-      commentsShown += 5;
+      commentsShown += COMMENTS_PART;
       if (commentsShown >= commentsArray.length) {
         commentsLoaderElement.classList.add('hidden');
         commentsShown = commentsArray.length;
