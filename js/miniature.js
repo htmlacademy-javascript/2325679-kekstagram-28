@@ -16,4 +16,6 @@ const renderMiniatures = (miniatures) => {
   });
   picturePlaceElement.appendChild(postsFragment);
 };
+
+
 export {renderMiniatures, posts};
