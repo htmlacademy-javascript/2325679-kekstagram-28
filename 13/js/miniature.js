@@ -8,14 +8,14 @@ const discussedFilterElement = document.querySelector('#filter-discussed');
 let posts = '';
 const postsFragment = document.createDocumentFragment();
 
-const getCountLikes = (post) => {
-  const countLikes = post.likes;
-  return countLikes;
+const getCountComments = (post) => {
+  const countComments = post.comments.length;
+  return countComments;
 };
 
-const sortLikes = (a, b) => {
-  const likesA = getCountLikes(a);
-  const likesB = getCountLikes(b);
+const sortComments = (a, b) => {
+  const likesA = getCountComments(a);
+  const likesB = getCountComments(b);
 
   return likesB - likesA;
 };
@@ -68,4 +68,4 @@ const setDiscussedFilter = (cb) => {
   });
 };
 
-export {renderMiniatures, posts, showBlockFilters, setDefaultFilter, setRandomFilter, setDiscussedFilter, sortLikes};
+export {renderMiniatures, posts, showBlockFilters, setDefaultFilter, setRandomFilter, setDiscussedFilter, sortComments};
