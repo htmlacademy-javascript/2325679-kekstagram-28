@@ -1,4 +1,4 @@
-import {posts} from './miniature.js';
+import {getPosts} from './miniature.js';
 import {isEscapeKey} from './util.js';
 
 const IMG_WIDTH = '35';
@@ -56,7 +56,7 @@ const showFullSizePictures = (evt) => {
     document.addEventListener('keydown', onDocumentKeydown);
 
     let commentsShown = 0;
-
+    const posts = getPosts();
     const commentsPostsArray = [];
     for (let i = 0; i < posts.length; i++) {
       if (evt.target.src.includes(posts[i].url)) {
