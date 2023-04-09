@@ -4,6 +4,7 @@ import {renderMiniatures, showBlockFilters, setDefaultFilter, setRandomFilter, s
 import './full-size-picture.js';
 import './form.js';
 import './edit-img.js';
+import './avatar.js';
 
 const RANDOM_ARRAY_POSTS_LENGTH = 10;
 

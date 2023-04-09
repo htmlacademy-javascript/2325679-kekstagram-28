@@ -41,6 +41,8 @@ const renderMiniatures = (miniatures) => {
   picturePlaceElement.appendChild(postsFragment);
 };
 
+const getPosts = () => posts;
+
 const setDefaultFilter = (cb) => {
   defaultFilterElement.addEventListener('click', () => {
     defaultFilterElement.classList.add('img-filters__button--active');
@@ -68,4 +70,4 @@ const setDiscussedFilter = (cb) => {
   });
 };
 
-export {renderMiniatures, posts, showBlockFilters, setDefaultFilter, setRandomFilter, setDiscussedFilter, sortComments};
+export {renderMiniatures, getPosts, showBlockFilters, setDefaultFilter, setRandomFilter, setDiscussedFilter, sortComments};
